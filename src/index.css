@@ -1,0 +1,15 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  scrollbar-color: #56A8C1 #FFF;
+  scrollbar-width: thin;
+}
+
+@font-face {
+  font-family: 'Zyara';
+  src: url('./assets/fonts/Cairo.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
