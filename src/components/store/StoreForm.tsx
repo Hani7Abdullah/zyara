@@ -198,7 +198,7 @@ export default function StoreForm({
     (data: Partial<StoreModel>): FormData => {
       const formData = new FormData();
 
-      if (mode === "update") formData.append("_method", "PUT");
+      if (mode === "update") formData.append("_method", "PATCH");
 
       // Basic store fields
       const entries: [keyof StoreModel, unknown][] = [

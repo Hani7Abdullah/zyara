@@ -57,7 +57,7 @@ export const useRoleStore = create<RoleState>((set) => ({
   updateRole: async (id, role) => {
     set({ loading: true });
     try {
-      const res = await api.put(`${ENDPOINT}/${id}`, role);
+      const res = await api.patch(`${ENDPOINT}/${id}`, role);
       set((state) => ({
         data: (state.data as RoleModel[]).map((a) => (a.id === id ? res.data.data : a)),
       }));

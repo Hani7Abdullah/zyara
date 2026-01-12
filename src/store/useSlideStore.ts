@@ -1,23 +1,21 @@
 import { create } from "zustand";
 import type { SliderState, SlideModel } from "../types/slide";
 import api from "../api";
-import { handleApiError } from "../api/apiErrorHandler";
-import { handleApiSuccess } from "../api/apiSuccessHandler";
 
-const ENDPOINT = "slides/accounts";
+const ENDPOINT = "sliders";
 
-export const useSlideStore = create<SliderState>((set, get) => ({
+export const useSlideStore = create<SliderState>((set) => ({
   status: false,
   message: "",
   data: [] as SlideModel[],
   selected: {
-    id: "",
+   id: 0,
     image: "",
     start_date: "",
     end_date: "",
     type: "internal",
-    priority: 0,
-    store_id: "",
+    index: 0,
+    store_id: 0,
     store: null,
     owner: null,
     link: null,
@@ -27,23 +25,22 @@ export const useSlideStore = create<SliderState>((set, get) => ({
   mode: "view",
   total: 0,
 
-  fetchSlider: async (page = 0, per_page = 10, search = "") => {
+  fetchSlider: async (page = 1, per_page = 10, search = "") => {
     set({ loading: true });
     try {
       const res = await api.get(ENDPOINT, {
-        params: { page: page + 1, per_page, search }, // include search
+        params: { page, per_page, search }, // include search
       });
 
       set({
-        data: res.data.data.items,
-        total: res.data.data.total || res.data.data.items.length,
-        status: get().status,
-        message: get().message,
+        data: res.data.data,
+        total: res.data.pagination.total,
+        status: res.data.status,
+        message: res.data.message,
       });
-
-      handleApiSuccess(get().message);
+      return res.data.data;
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }
@@ -52,13 +49,14 @@ export const useSlideStore = create<SliderState>((set, get) => ({
   createSlide: async (slide) => {
     set({ loading: true });
     try {
-      const res = await api.post<SlideModel>(ENDPOINT, slide);
+      const res = await api.post(ENDPOINT, slide, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       set((state) => ({
-        data: [res.data, ...(state.data as SlideModel[])],
+        data: [res.data.data, ...(state.data as SlideModel[])],
       }));
-      handleApiSuccess(get().message);
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }
@@ -67,13 +65,14 @@ export const useSlideStore = create<SliderState>((set, get) => ({
   updateSlide: async (id, slide) => {
     set({ loading: true });
     try {
-      const res = await api.put<SlideModel>(`${ENDPOINT}/${id}`, slide);
+      const res = await api.post(`${ENDPOINT}/${id}`, slide, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       set((state) => ({
-        data: (state.data as SlideModel[]).map((a) => (a.id === id ? res.data : a)),
+        data: (state.data as SlideModel[]).map((a) => (a.id === id ? res.data.data : a)),
       }));
-      handleApiSuccess(get().message);
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }
@@ -86,9 +85,8 @@ export const useSlideStore = create<SliderState>((set, get) => ({
       set((state) => ({
         data: (state.data as SlideModel[]).filter((a) => a.id !== id),
       }));
-      handleApiSuccess(get().message);
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }
@@ -97,13 +95,12 @@ export const useSlideStore = create<SliderState>((set, get) => ({
   switchActivation: async (id) => {
     set({ loading: true });
     try {
-      const res = await api.put<SlideModel>(`${ENDPOINT}/${id}/switch-activation`);
+      const res = await api.patch(`${ENDPOINT}/${id}/switch`);
       set((state) => ({
-        data: (state.data as SlideModel[]).map((a) => (a.id === id ? res.data : a)),
+        data: (state.data as SlideModel[]).map((a) => (a.id === id ? res.data.data : a)),
       }));
-      handleApiSuccess(get().message);
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }

@@ -8,8 +8,6 @@ import { useSettingStore } from "../store/useSettingStore";
 import { Stack, IconButton } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 
 // i18next
 import { useTranslation } from "react-i18next";
@@ -23,7 +21,7 @@ import type { CRUDMode } from "../types/common";
 import type { SettingModel } from "../types/setting";
 
 export default function Settings() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Extract state & actions from the setting store
   const {
@@ -78,9 +76,14 @@ export default function Settings() {
 
   // Define columns for EntityTable
   const columns: Column<SettingModel>[] = [
-    { key: "id", label: "ID", sortable: true },
-    { key: "name", label: "Name", sortable: true },
-    { key: "value", label: "Value", sortable: true },
+    { key: "id", label: "#", sortable: true },
+    {
+      key: "name",
+      label: t("shared.name"),
+      sortable: true,
+      render: (_value, row) => i18n.language === "en" ? row.name : row.arabic_name,
+    },
+    { key: "value", label: t("shared.value"), sortable: true },
   ];
 
   return (
@@ -95,22 +98,12 @@ export default function Settings() {
         total={total}
         onPageChange={setPage}
         onRowsPerPageChange={setPerPage}
-        showCreate
+        showCreate={false}
         createLabel={t("create")}
         onCreateClick={() => openForm("create")}
         actions={(setting) => (
           <Stack direction="row" spacing={1}>
-            {/* View button */}
-            <IconButton
-              onClick={() => openForm("view", setting)}
-              sx={{
-                bgcolor: (theme) => alpha(theme.palette.info.main, 0.1),
-                color: "info.main",
-                "&:hover": { bgcolor: (theme) => alpha(theme.palette.info.main, 0.2) },
-              }}
-            >
-              <VisibilityIcon fontSize="small" />
-            </IconButton>
+           
 
             {/* Edit button */}
             <IconButton
@@ -122,18 +115,6 @@ export default function Settings() {
               }}
             >
               <EditIcon fontSize="small" />
-            </IconButton>
-
-            {/* Delete button */}
-            <IconButton
-              onClick={() => openForm("delete", setting)}
-              sx={{
-                bgcolor: (theme) => alpha(theme.palette.error.main, 0.1),
-                color: "error.main",
-                "&:hover": { bgcolor: (theme) => alpha(theme.palette.error.main, 0.2) },
-              }}
-            >
-              <DeleteIcon fontSize="small" />
             </IconButton>
           </Stack>
         )}

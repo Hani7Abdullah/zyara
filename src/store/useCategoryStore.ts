@@ -75,7 +75,6 @@ export const useCategoryStore = create<CategoryState>((set) => ({
   },
 
   enableInStores: async (data) => {
-    console.log("data: ", data)
     set({ loading: true });
     try {
       const res = await api.post(`${ENDPOINT}/enable-in-stores`, data);
@@ -98,7 +97,7 @@ export const useCategoryStore = create<CategoryState>((set) => ({
   updateCategory: async (id, category) => {
     set({ loading: true });
     try {
-      const res = await api.put(`${ENDPOINT}/${id}`, category);
+      const res = await api.post(`${ENDPOINT}/${id}`, category);
       set((state) => ({
         data: (state.data as CategoryModel[]).map((a) => (a.id === id ? res.data.data : a)),
       }));
@@ -126,7 +125,7 @@ export const useCategoryStore = create<CategoryState>((set) => ({
   switchActivation: async (id) => {
     set({ loading: true });
     try {
-      const res = await api.put(`${ENDPOINT}/${id}/switch`);
+      const res = await api.patch(`${ENDPOINT}/${id}/switch`);
       set((state) => ({
         data: (state.data as CategoryModel[]).map((a) => (a.id === id ? res.data.data : a)),
       }));
@@ -154,7 +153,7 @@ export const useCategoryStore = create<CategoryState>((set) => ({
   switchActivationInStore: async (storeId, categoryId) => {
     set({ loading: true });
     try {
-      const res = await api.post(`categories/${categoryId}/stores/${storeId}/switch`);
+      const res = await api.patch(`categories/${categoryId}/stores/${storeId}/switch`);
       set((state) => ({
         vendorData: (state.vendorData as CategoryModel[]).map((a) =>
           a.id === categoryId ? res.data.data : a

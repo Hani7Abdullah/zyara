@@ -1,28 +1,25 @@
 import { create } from "zustand";
 import type { CouponState, CouponModel } from "../types/coupon";
 import api from "../api";
-import { handleApiError } from "../api/apiErrorHandler";
-import { handleApiSuccess } from "../api/apiSuccessHandler";
 
-const ENDPOINT = "coupons/accounts";
+const ENDPOINT = "coupons";
 
-export const useCouponStore = create<CouponState>((set, get) => ({
+export const useCouponStore = create<CouponState>((set) => ({
   status: false,
   message: "",
   data: [] as CouponModel[],
   selected: {
-    id: "",
+    id: 0,
     vendor_id: 0,
     vendor: {
-      id: "",
+      id: 0,
       name: "",
       email: "",
       mobile_number: "",
       password: "",
       image: "",
-      role_name: "",
       is_active: false,
-      is_admin: false
+      is_admin: false,
     },
     name: "",
     arabic_name: "",
@@ -31,31 +28,41 @@ export const useCouponStore = create<CouponState>((set, get) => ({
     code: "",
     type: "discount",
     discount: 0,
-    for_all: false,
-    clients: [],
-    is_active: false
+    for_all_users: false,
+    for_all_stores: false,
+    users: [],
+    stores: [],
+    is_active: false,
   },
   loading: false,
   mode: "view",
   total: 0,
 
-  fetchCoupons: async (page = 0, per_page = 10, search = "") => {
+  fetchCoupons: async (page = 1, per_page = 10, search = "", filterType, filterValue) => {
     set({ loading: true });
     try {
-      const res = await api.get(ENDPOINT, {
-        params: { page: page + 1, per_page, search }, // include search
-      });
+      const params: Record<string, unknown> = { page, per_page, search };
+
+      const hasFilterParams = filterType && filterValue !== undefined && filterValue !== null;
+      if (hasFilterParams) {
+        params[filterType] = filterValue;
+        console.log(filterType);
+        console.log(filterValue);
+      }
+
+      const res = await api.get(ENDPOINT, { params });
 
       set({
-        data: res.data.data.items,
-        total: res.data.data.total || res.data.data.items.length,
-        status: get().status,
-        message: get().message,
+        data: res.data.data,
+        total: res.data.pagination?.total || 0,
+        status: res.data.status,
+        message: res.data.message,
       });
 
-      handleApiSuccess(get().message);
+      return res.data.data;
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
+      return [];
     } finally {
       set({ loading: false });
     }
@@ -64,13 +71,12 @@ export const useCouponStore = create<CouponState>((set, get) => ({
   createCoupon: async (coupon) => {
     set({ loading: true });
     try {
-      const res = await api.post<CouponModel>(ENDPOINT, coupon);
+      const res = await api.post(ENDPOINT, coupon);
       set((state) => ({
-        data: [res.data, ...(state.data as CouponModel[])],
+        data: [res.data.data, ...(state.data as CouponModel[])],
       }));
-      handleApiSuccess(get().message);
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }
@@ -79,13 +85,12 @@ export const useCouponStore = create<CouponState>((set, get) => ({
   updateCoupon: async (id, coupon) => {
     set({ loading: true });
     try {
-      const res = await api.put<CouponModel>(`${ENDPOINT}/${id}`, coupon);
+      const res = await api.patch(`${ENDPOINT}/${id}`, coupon);
       set((state) => ({
-        data: (state.data as CouponModel[]).map((a) => (a.id === id ? res.data : a)),
+        data: (state.data as CouponModel[]).map((a) => (a.id === id ? res.data.data : a)),
       }));
-      handleApiSuccess(get().message);
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }
@@ -98,24 +103,22 @@ export const useCouponStore = create<CouponState>((set, get) => ({
       set((state) => ({
         data: (state.data as CouponModel[]).filter((a) => a.id !== id),
       }));
-      handleApiSuccess(get().message);
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }
   },
 
-  switchActivation: async (id) => {
+  switchActivation: async (id, storeId) => {
     set({ loading: true });
     try {
-      const res = await api.put<CouponModel>(`${ENDPOINT}/${id}/switch-activation`);
+      const res = await api.patch(`${ENDPOINT}/${id}/stores/${storeId}/switch`);
       set((state) => ({
-        data: (state.data as CouponModel[]).map((a) => (a.id === id ? res.data : a)),
+        data: (state.data as CouponModel[]).map((a) => (a.id === id ? res.data.data : a)),
       }));
-      handleApiSuccess(get().message);
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }

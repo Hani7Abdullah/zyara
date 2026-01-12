@@ -12,6 +12,7 @@
   "products": "المنتجات",
   "orders": "الطلبات",
   "payment methods": "طرق الدفع",
+  "join requests": "طلبات الانضمام",
   "financial": "المالية",
   "currencies": "العملات",
   "stores": "المتاجر",
@@ -21,13 +22,13 @@
   "message": "الرسالة",
   "complaints": "الشكاوى",
   "notifications": "الإشعارات",
-  "faq": "الأسئلة المتكررة",
+  "topics": "المواضيع الشائعة",
   "coupons": "الكوبونات",
   "gift cards": "بطاقات الهدايا",
   "popular topics": "المواضيع الشائعة",
   "recharge balances": "إعادة شحن الأرصدة",
-  "system information": "معلومات النظام",
-  "app versions": "إصدارات التطبيق",
+  "information": "معلومات النظام",
+  "versions": "إصدارات التطبيق",
   "offers": "العروض",
   "slider": "الشرائح المتحركة",
   "settings": "الإعدادات",
@@ -39,6 +40,7 @@
   "view": "عرض",
   "search": "بحث",
   "no-data": "لا توجد بيانات.",
+  "store_name": "اسم المتجر",
   "error": {
     "not-found-title": "نأسف، الصفحة غير موجودة!",
     "not-found-description": "الصفحة التي تبحث عنها قد تكون محذوفة أو تم تغيير اسمها أو أنها غير متاحة مؤقتًا.",
@@ -60,6 +62,8 @@
     "multiple": "متعدد",
     "name": "الاسم",
     "arabic_name": "الاسم بالعربية",
+    "value": "القيمة",
+    "arabic_value": "القيمة بالعربية",
     "email": "البريد الإلكتروني",
     "description": "الوصف",
     "arabic_description": "الوصف بالعربية",
@@ -79,7 +83,10 @@
     "arabic_address": "العنوان بالعربية",
     "syp": "ل.س",
     "yes": "نعم",
-    "no": "كلا"
+    "no": "كلا",
+    "start_date": "تاريخ البداية",
+  "end_date": "تاريخ النهاية",
+  "type": "النوع"
   },
   "paymentMethod": {
     "title": "طريقة الدفع",
@@ -143,6 +150,16 @@
     "addNew": "إضافة مسؤول جديد",
     "confirmDelete": "هل أنت متأكد أنك تريد حذف هذا المسؤول؟"
   },
+   "coupon": {
+    "title": "كود الحسم",
+    "addNew": "إضافة كود حسم جديد",
+    "confirmDelete": "هل أنت متأكد أنك تريد حذف كوبون الحسم هذا؟",
+    "code": "الكود",
+    "discount": "الخصم",
+    "free delivery": "توصيل مجاني",
+    "for_all_users": "لكافة المستخدمين",
+    "for_all_stores": "لكافة المتاجر"
+  },
   "vendor": {
     "title": "التاجر",
     "addNew": "إضافة تاجر جديد",
@@ -162,6 +179,44 @@
     "addNew": "إضافة دور جديد",
     "confirmDelete": "هل أنت متأكد أنك تريد حذف هذا الدور؟",
     "permissions": "الصلاحيات"
+  },
+   "setting": {
+    "title": "الإعداد"
+  },
+  "popularTopic": {
+    "title": "الموضوع",
+    "addNew": "إضافة موضوع جديد",
+    "confirmDelete": "هل أنت متأكد أنك تريد حذف هذا الموضوع؟",
+    "question": "السؤال",
+    "arabic_question": "السؤال بالعربي",
+    "answer": "الإجابة",
+    "arabic_answer": "الإجابة بالعربي"
+  },
+  "slide": {
+  "title": "الشريحة",
+  "addNew": "إضافة شريحة جديدة",
+  "confirmDelete": "هل أنت متأكد أنك تريد حذف هذه الشريحة؟",
+  "internal": "داخلي",
+  "external": "خارجي",
+  "owner": "المالك"
+},
+   "systemInformation": {
+    "title": "معلومات النظام",
+    "content": "المحتوى",
+    "arabic_content": "المحتوى بالعربية"
+  },
+  "version": {
+    "title": "الإصدار",
+    "addNew": "إضافة إصدار جديد",
+    "platform": "البيئة",
+    "android": "أندرويد",
+    "ios": "أيفون",
+    "currency": "العملة",
+    "SYP": "ل.س",
+    "$": "$",
+    "is_required": "إجباري؟",
+    "status": "الحالة",
+    "released_at": "تاريخ النشر"
   },
   "store": {
     "title": "المتجر",
@@ -224,7 +279,8 @@
     "password-match": "يجب أن تتطابق كلمات المرور",
     "password-confirm-required": "يرجى تأكيد كلمة المرور",
     "submit": "إعادة تعيين كلمة المرور",
-    "submitting": "يتم الإرسال"
+    "submitting": "يتم الإرسال",
+    "sending": "يتم الإرسال"
   },
   "autocomplete": {
     "loading": "جارٍ التحميل...",

@@ -25,17 +25,17 @@ const Vendors = lazy(() => import('../pages/Vendors'));
 const Admins = lazy(() => import('../pages/Admins'));
 const GiftCards = lazy(() => import('../pages/GiftCards'));
 const GiftCardRequests = lazy(() => import('../pages/GiftCardRequests'))
-const Currencies = lazy(() => import('../pages/Currencies'));
 const Stores = lazy(() => import('../pages/Stores'));
 const Slider = lazy(() => import('../pages/Slider'));
 const Products = lazy(() => import('../pages/Products'));
-const Offers = lazy(() => import('../pages/Offers'));
+const Coupons = lazy(() => import('../pages/Coupons'));
 const Orders = lazy(() => import('../pages/Orders'));
 const PaymentMethods = lazy(() => import('../pages/PaymentMethods'));
 const Messages = lazy(() => import('../pages/Messages'));
 const PopularTopics = lazy(() => import('../pages/PopularTopics'));
 const Settings = lazy(() => import('../pages/Settings'));
 const SystemInformation = lazy(() => import('../pages/SystemInformation'));
+const JoinRequests = lazy(() => import('../pages/JoinRequests'));
 
 // Helper component to handle i18n hook correctly
 export function ErrorWrapper({ type, layout }: { type: 'not-found' | 'unauthorized', layout: 'default' | 'dashboard' }) {
@@ -84,19 +84,19 @@ export const protectedRoutes: RouteObject[] = [
   {
     path: '/products',
     element: (
-      <RequireRole roles={['admin','vendor']}>
+      <RequireRole roles={['vendor']}>
         <Suspense fallback={<Loading />}>
           <Products />
         </Suspense>
       </RequireRole>
     )
   },
-  {
-    path: '/offers',
+   {
+    path: '/coupons',
     element: (
       <RequireRole roles={['vendor']}>
         <Suspense fallback={<Loading />}>
-          <Offers />
+          <Coupons />
         </Suspense>
       </RequireRole>
     )
@@ -104,7 +104,7 @@ export const protectedRoutes: RouteObject[] = [
   {
     path: '/payment-methods',
     element: (
-      <RequireRole roles={['admin', 'vendor']}>
+      <RequireRole roles={['admin']}>
         <Suspense fallback={<Loading />}>
           <PaymentMethods />
         </Suspense>
@@ -114,7 +114,7 @@ export const protectedRoutes: RouteObject[] = [
   {
     path: '/orders',
     element: (
-      <RequireRole roles={['admin', 'vendor']}>
+      <RequireRole roles={['vendor']}>
         <Suspense fallback={<Loading />}>
           <Orders />
         </Suspense>
@@ -124,7 +124,7 @@ export const protectedRoutes: RouteObject[] = [
   {
     path: '/gift-cards',
     element: (
-      <RequireRole roles={['admin', 'vendor']}>
+      <RequireRole roles={['admin']}>
         <Suspense fallback={<Loading />}>
           <GiftCards />
         </Suspense>
@@ -134,7 +134,7 @@ export const protectedRoutes: RouteObject[] = [
   {
     path: '/gift-card-requests',
     element: (
-      <RequireRole roles={['admin', 'vendor']}>
+      <RequireRole roles={['admin']}>
         <Suspense fallback={<Loading />}>
           <GiftCardRequests />
         </Suspense>
@@ -144,7 +144,7 @@ export const protectedRoutes: RouteObject[] = [
   {
     path: '/slider',
     element: (
-      <RequireRole roles={['admin', 'vendor']}>
+      <RequireRole roles={['admin']}>
         <Suspense fallback={<Loading />}>
           <Slider />
         </Suspense>
@@ -162,7 +162,7 @@ export const protectedRoutes: RouteObject[] = [
     )
   },
   {
-    path: '/popular-topics',
+    path: '/topics',
     element: (
       <RequireRole roles={['admin']}>
         <Suspense fallback={<Loading />}>
@@ -172,19 +172,9 @@ export const protectedRoutes: RouteObject[] = [
     )
   },
   {
-    path: '/currencies',
-    element: (
-      <RequireRole roles={['admin', 'vendor']}>
-        <Suspense fallback={<Loading />}>
-          <Currencies />
-        </Suspense>
-      </RequireRole>
-    )
-  },
-  {
     path: '/versions',
     element: (
-      <RequireRole roles={['admin', 'vendor']}>
+      <RequireRole roles={['admin']}>
         <Suspense fallback={<Loading />}>
           <Versions />
         </Suspense>
@@ -244,7 +234,7 @@ export const protectedRoutes: RouteObject[] = [
   {
     path: '/settings',
     element: (
-      <RequireRole roles={['admin', 'vendor']}>
+      <RequireRole roles={['admin']}>
         <Suspense fallback={<Loading />}>
           <Settings />
         </Suspense>
@@ -252,11 +242,21 @@ export const protectedRoutes: RouteObject[] = [
     )
   },
   {
-    path: '/system-information',
+    path: '/information',
     element: (
-      <RequireRole roles={['admin', 'vendor']}>
+      <RequireRole roles={['admin']}>
         <Suspense fallback={<Loading />}>
           <SystemInformation />
+        </Suspense>
+      </RequireRole>
+    )
+  },
+  {
+    path: '/join-requests',
+    element: (
+      <RequireRole roles={['admin']}>
+        <Suspense fallback={<Loading />}>
+          <JoinRequests />
         </Suspense>
       </RequireRole>
     )

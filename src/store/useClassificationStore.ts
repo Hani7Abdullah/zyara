@@ -14,7 +14,7 @@ export const useClassificationStore = create<ClassificationState>((set) => ({
     arabic_name: "",
     icon: "",
     color: "",
-    sort: 0,
+    index: 0,
     is_active: false
   },
   loading: false,
@@ -91,7 +91,7 @@ export const useClassificationStore = create<ClassificationState>((set) => ({
   switchActivation: async (id) => {
     set({ loading: true });
     try {
-      const res = await api.put(`${ENDPOINT}/${id}/switch`);
+      const res = await api.patch(`${ENDPOINT}/${id}/switch`);
       set((state) => ({
         data: (state.data as ClassificationModel[]).map((a) => (a.id === id ? res.data.data : a)),
       }));

@@ -83,7 +83,7 @@ export default function VendorForm({
     try {
       const formData = new FormData();
 
-      if (mode === "update") formData.append("_method", "PUT");
+      if (mode === "update") formData.append("_method", "PATCH");
 
       Object.entries(data).forEach(([key, value]) => {
         const initialValue = initialData?.[key as keyof VendorModel];

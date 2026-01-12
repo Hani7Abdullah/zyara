@@ -25,6 +25,7 @@ import {
   InfoOutlined,
   FormatListBulletedOutlined,
   ScatterPlotOutlined,
+  RequestPageOutlined
 } from '@mui/icons-material';
 
 export interface MenuItem {
@@ -46,28 +47,33 @@ export const sidebarMenu: MenuItem[] = [
   { textKey: 'Classifications', icon: <FormatListBulletedOutlined fontSize="small" />, path: '/classifications', role: "admin" },
   { textKey: 'Stores', icon: <Storefront fontSize="small" />, path: '/stores' },
   { textKey: 'Categories', icon: <ScatterPlotOutlined fontSize="small" />, path: '/categories'},
-  { textKey: 'Products', icon: <Inventory2Outlined fontSize="small" />, path: '/products' },
+  { textKey: 'Products', icon: <Inventory2Outlined fontSize="small" />, path: '/products', role: "vendor" },
   // { textKey: 'orders', icon: <ReceiptLongOutlined fontSize="small" />, path: '/orders' },
 
   // Payments
-  // { textKey: 'payment methods', icon: <CreditCardOutlined fontSize="small" />, path: '/payment-methods', role: "admin" },
+  { textKey: 'payment methods', icon: <CreditCardOutlined fontSize="small" />, path: '/payment-methods', role: "admin" },
   // { textKey: 'currencies', icon: <AttachMoney fontSize="small" />, path: '/currencies', role: "admin" },
   // { textKey: 'recharge balances', icon: <PhoneIphone fontSize="small" />, path: '/mobile-recharge', role: "admin" },
 
   // Promotions & Marketing
-  // { textKey: 'coupons', icon: <LocalOfferOutlined fontSize="small" />, path: '/coupons' },
+  { textKey: 'coupons', icon: <LocalOfferOutlined fontSize="small" />, path: '/coupons', role: "vendor" },
   // { textKey: 'gift cards', icon: <CardGiftcardOutlined fontSize="small" />, path: '/gift-cards', role: "admin" },
   // { textKey: 'gift card requests', icon: <AssignmentTurnedInOutlined fontSize="small" />, path: '/gift-card-requests', role: "admin" },
   { textKey: 'Slider', icon: <SlideshowOutlined fontSize="small" />, path: '/slider', role: "admin" },
-  // { textKey: 'popular topics', icon: <HelpOutline fontSize="small" />, path: '/popular-topics', role: "admin" },
+  { textKey: 'Topics', icon: <HelpOutline fontSize="small" />, path: '/topics', role: "admin" },
 
   // Communication
-  // { textKey: 'messages', icon: <MarkunreadOutlined fontSize="small" />, path: '/messages', role: "admin" },
+  
+  { textKey: 'Messages', icon: <MarkunreadOutlined fontSize="small" />, path: '/messages', role: "admin" },
+{ textKey: 'Join Requests', icon: <RequestPageOutlined fontSize="small" />, path: '/join-requests', role: "admin" },
 
   // System & Settings
-  // { textKey: 'system information', icon: <InfoOutlined fontSize="small" />, path: '/system-information', role: "admin" },
-  // { textKey: 'settings', icon: <SettingsOutlined fontSize="small" />, path: '/settings', role: "admin" },
-  // { textKey: 'app versions', icon: <SystemUpdateAltOutlined fontSize="small" />, path: '/versions', role: "admin" },
+  { textKey: 'Information', icon: <InfoOutlined fontSize="small" />, path: '/information', role: "admin" },
+  { textKey: 'Settings', icon: <SettingsOutlined fontSize="small" />, path: '/settings', role: "admin" },
+  { textKey: 'Versions', icon: <SystemUpdateAltOutlined fontSize="small" />, path: '/versions', role: "admin" },
+
+  
+  
 ];
 
 export const useFilteredSidebarMenu = () => {

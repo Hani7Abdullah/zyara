@@ -120,7 +120,7 @@ export default function ProfileModal({ open, onClose }: Props) {
     setIsSubmittingProfile(true);
     try {
       const formData = new FormData();
-      formData.append("_method", "PUT");
+      formData.append("_method", "PATCH");
       formData.append("name", profileValues.name);
       formData.append("mobile_number", profileValues.mobile_number);
       if (selectedImage) formData.append("image", selectedImage);

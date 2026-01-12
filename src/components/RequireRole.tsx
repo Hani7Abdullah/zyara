@@ -28,13 +28,18 @@ export default function RequireAccess({ roles, children }: RequireAccessProps) {
 
   // Permission check (for admins)
   if (userRole === "admin") {
-    // Convert path to permission key: "/roles" -> "Roles", "/admin-panel" -> "AdminPanel"
+    // Convert path to permission key: "/roles" -> "Roles", "/admin-panel" -> "Admin Panel"
     const pathKey = location.pathname
       .split("/")
-      .filter(Boolean)
-      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-      .join("");
-      
+      .filter((part) => part.trim() !== "")
+      .map((part) =>
+        part
+          .split("-")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ")
+      )
+      .join(" ");
+
     if (!myPermissions[pathKey]) return <Navigate to="/403" replace />;
   }
 

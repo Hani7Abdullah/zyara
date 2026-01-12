@@ -3,7 +3,7 @@ import type { BaseState } from "./common";
 
 export interface MessageModel {
   id: string;
-  client: ClientModel;
+  user: ClientModel;
   message: string;
 }
 

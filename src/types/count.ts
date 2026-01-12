@@ -12,6 +12,7 @@ export interface CountModel {
     categories: number;
     products: number;
     stores: number;
+    users: number;
 }
 
 export interface CountState extends BaseState<CountModel> {

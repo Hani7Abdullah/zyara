@@ -1,13 +1,13 @@
 import { create } from "zustand";
-import type { MessageState, MessageModel } from "../types/message";
+import type { JoinRequestState, JoinRequestModel } from "../types/joinRequest";
 import api from "../api";
 
-const ENDPOINT = "messages";
+const ENDPOINT = "join-requests";
 
-export const useMessageStore = create<MessageState>((set) => ({
+export const useJoinRequestStore = create<JoinRequestState>((set) => ({
   status: false,
   message: "",
-  data: [] as MessageModel[],
+  data: [] as JoinRequestModel[],
   selected: {
     id: "",
     user: {
@@ -16,18 +16,18 @@ export const useMessageStore = create<MessageState>((set) => ({
     email: "",
     mobile_number: "",
     country: "",
-    birth_day: "",
     image: "",
     addresses: [],
     is_active: false
     },
-    message: ""
+    classification: "",
+    store_name: ""
   },
   loading: false,
   mode: "view",
   total: 0,
 
-  fetchMessages: async (page = 1, per_page = 10, search = "") => {
+  fetchJoinRequests: async (page = 1, per_page = 10, search = "") => {
       set({ loading: true });
       try {
         const res = await api.get(ENDPOINT, {
@@ -38,7 +38,7 @@ export const useMessageStore = create<MessageState>((set) => ({
           data: res.data.data,
           total: res.data.pagination.total,
           status: res.data.status,
-          message: res.data.message,
+          message: res.data.joinRequest,
         });
         return res.data.data;
       } catch (err) {
@@ -48,5 +48,5 @@ export const useMessageStore = create<MessageState>((set) => ({
       }
     },
 
-  setSelectedMessage: (message) => set({ selected: message }),
+  setSelectedJoinRequest: (joinRequest) => set({ selected: joinRequest }),
 }));

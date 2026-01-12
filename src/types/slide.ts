@@ -10,13 +10,13 @@ export interface Owner {
 }
 
 export interface SlideModel {
-  id: string;
+  id: number;
   image: string;
   start_date: string;
   end_date: string;
   type: SlideType;
-  priority: number;
-  store_id: string | null;
+  index: number;
+  store_id: number | null;
   store: StoreModel | null;
   owner: Owner | null;
   link: string | null;
@@ -24,10 +24,10 @@ export interface SlideModel {
 }
 
 export interface SliderState extends BaseState<SlideModel> {
-  fetchSlider: (page: number, per_page: number, search: string) => Promise<void>;
-  createSlide: (coupon: Omit<SlideModel, "id" | "store">) => Promise<void>;
-  updateSlide: (id: string, coupon: Partial<SlideModel>) => Promise<void>;
-  deleteSlide: (id: string) => Promise<void>;
-  switchActivation: (id: string) => Promise<void>;
+  fetchSlider: (page: number, per_page: number, search: string) => Promise<SlideModel[]>;
+  createSlide: (slide: FormData) => Promise<void>;
+  updateSlide: (id: number, slide:FormData ) => Promise<void>;
+  deleteSlide: (id: number) => Promise<void>;
+  switchActivation: (id: number) => Promise<void>;
   setSelectedSlide: (slide: SlideModel) => void;
 }

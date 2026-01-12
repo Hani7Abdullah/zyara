@@ -150,7 +150,7 @@ export const useProductStore = create<ProductState>((set) => ({
   switchActivation: async (id) => {
     set({ loading: true });
     try {
-      const res = await api.put(`${ENDPOINT}/${id}/switch`);
+      const res = await api.patch(`${ENDPOINT}/${id}/switch`);
       set((state) => ({
         data: (state.data as ProductModel[]).map((a) => (a.id === id ? res.data.data : a)),
       }));

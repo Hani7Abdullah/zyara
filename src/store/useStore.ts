@@ -18,7 +18,7 @@ export const useStore = create<StoreState>((set) => ({
       icon: "",
       color: "",
       is_active: false,
-      sort: 0
+      index: 0
     },
     vendor_id: 0,
     vendor: {
@@ -120,7 +120,7 @@ export const useStore = create<StoreState>((set) => ({
   switchActivation: async (id) => {
     set({ loading: true });
     try {
-      const res = await api.put(`${ENDPOINT}/${id}/switch`);
+      const res = await api.patch(`${ENDPOINT}/${id}/switch`);
       set((state) => ({
         data: (state.data as StoreModel[]).map((a) => (a.id === id ? res.data.data : a)),
       }));

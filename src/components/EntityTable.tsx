@@ -175,7 +175,12 @@ export default function EntityTable<T>({
             {data.map((row, idx) => (
               <TableRow key={idx} sx={{ "& td": { py: 1 } }}>
                 {columns.map((col) => (
-                  <TableCell key={String(col.key)}>
+                  <TableCell
+                    key={String(col.key)}
+                    sx={{
+                      whiteSpace: "pre-wrap",
+                    }}
+                  >
                     {col.render
                       ? col.render(row[col.key], row)
                       : String(row[col.key])}

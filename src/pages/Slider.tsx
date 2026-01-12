@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useSlideStore } from "../store/useSlideStore";
 
 // MUI
-import { Stack, IconButton, Switch } from "@mui/material";
+import { Stack, IconButton, Switch, Avatar } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -68,11 +68,11 @@ export default function Slides() {
   };
 
   // Handle form submit depending on mode
-  const handleConfirm = async (data?: Partial<SlideModel>) => {
+  const handleConfirm = async (data?: FormData) => {
     try {
       if (formMode === "create" && data) {
         // Create new slide (exclude id, role, is_slide fields)
-        await createSlide(data as Omit<SlideModel, "id" | "role" | "is_slide">);
+        await createSlide(data);
       } else if (formMode === "update" && selectedSlide?.id && data) {
         // Update selected slide
         await updateSlide(selectedSlide.id, data);
@@ -87,7 +87,43 @@ export default function Slides() {
 
   // Define columns for EntityTable
   const columns: Column<SlideModel>[] = [
-    { key: "id", label: "ID", sortable: true },
+    { key: "id", label: "#", sortable: true },
+    {
+      key: "image",
+      label: t("shared.image"),
+      sortable: true,
+      render: (_value, row) => (
+        <Avatar
+          key={row.id}
+          src={row.image}
+          alt={t("slide.title")}
+          sx={{
+            width: "max-content",
+            objectFit: "contain",
+            borderRadius: 2,
+          }}
+        />
+      ),
+    },
+    {
+      key: "start_date",
+      label: t("shared.start_date"),
+      sortable: true,
+      render: (_, row) => (new Date(row.start_date).toLocaleDateString()),
+    },
+    {
+      key: "end_date",
+      label: t("shared.end_date"),
+      sortable: true,
+      render: (_, row) => (new Date(row.end_date).toLocaleDateString()),
+    },
+    { key: "index", label: t("shared.sort"), sortable: true },
+    {
+      key: "type",
+      label: t("shared.type"),
+      sortable: true,
+      render: (_, row) => t(`slide.${row.type.toLocaleLowerCase()}`),
+    },
   ];
 
   return (
@@ -145,7 +181,7 @@ export default function Slides() {
 
             {/* Switch Account toggle */}
             <Switch
-              checked={slide.is_active} 
+              checked={slide.is_active}
               onChange={async () => {
                 await switchActivation(slide.id);
               }}

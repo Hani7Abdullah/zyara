@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 // Store
-import { useMessageStore } from "../store/useMessageStore";
+import { useJoinRequestStore } from "../store/useJoinRequestStore";
 
 // i18next
 import { useTranslation } from "react-i18next";
@@ -11,26 +11,26 @@ import { useTranslation } from "react-i18next";
 import EntityTable, { type Column } from "../components/EntityTable";
 
 // Types
-import type { MessageModel } from "../types/message";
+import type { JoinRequestModel } from "../types/joinRequest";
 
-export default function Messages() {
+export default function JoinRequests() {
   const { t } = useTranslation();
 
-  // Extract state & actions from the message store
+  // Extract state & actions from the joinRequest store
   const {
-    data: messages,
+    data: joinRequests,
     total,
-    fetchMessages,
-  } = useMessageStore();
+    fetchJoinRequests,
+  } = useJoinRequestStore();
 
   // Local states
   const [page, setPage] = useState(0);
   const [per_page, setPerPage] = useState(10);
   const [search, setSearch] = useState("");
 
-  // Fetch messages whenever page or per_page changes
+  // Fetch joinRequests whenever page or per_page changes
   useEffect(() => {
-    fetchMessages(page, per_page, search);
+    fetchJoinRequests(page, per_page, search);
   }, [page, per_page, search]);
 
   // Handle search from EntityTable
@@ -40,7 +40,7 @@ export default function Messages() {
   };
 
   // Define columns for EntityTable
-  const columns: Column<MessageModel>[] = [
+  const columns: Column<JoinRequestModel>[] = [
     { key: "id", label: "#", sortable: true },
      {
       key: "user",
@@ -60,14 +60,15 @@ export default function Messages() {
       sortable: true,
       render: (_value, row) => row.user?.mobile_number || "-",
     },
-    { key: "message", label: t("message"), sortable: true },
+    { key: "classification", label: t("classification.title"), sortable: true },
+     { key: "store_name", label: t("store_name"), sortable: true },
   ];
 
   return (
     <>
-      {/* EntityTable for displaying messages */}
-      <EntityTable<MessageModel>
-        data={messages as MessageModel[]}
+      {/* EntityTable for displaying joinRequests */}
+      <EntityTable<JoinRequestModel>
+        data={joinRequests as JoinRequestModel[]}
         columns={columns}
         page={page}
         per_page={per_page}

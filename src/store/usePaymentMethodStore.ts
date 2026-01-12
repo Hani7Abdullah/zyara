@@ -1,17 +1,15 @@
 import { create } from "zustand";
 import type { PaymentMethodState, PaymentMethodModel } from "../types/paymentMethod";
 import api from "../api";
-import { handleApiError } from "../api/apiErrorHandler";
-import { handleApiSuccess } from "../api/apiSuccessHandler";
 
 const ENDPOINT = "payment-methods";
 
-export const usePaymentMethodStore = create<PaymentMethodState>((set, get) => ({
+export const usePaymentMethodStore = create<PaymentMethodState>((set) => ({
   status: false,
   message: "",
   data: [] as PaymentMethodModel[],
   selected: {
-    id: "",
+    id: 0,
     name: "",
     arabic_name: "",
     image: "",
@@ -21,23 +19,22 @@ export const usePaymentMethodStore = create<PaymentMethodState>((set, get) => ({
   mode: "view",
   total: 0,
 
-  fetchPaymentMethods: async (page = 0, per_page = 10, search = "") => {
+  fetchPaymentMethods: async (page = 1, per_page = 10, search = "") => {
     set({ loading: true });
     try {
       const res = await api.get(ENDPOINT, {
-        params: { page: page + 1, per_page, search }, // include search
+        params: { page, per_page, search }, // include search
       });
 
       set({
-        data: res.data.data.items,
-        total: res.data.data.total || res.data.data.items.length,
-        status: get().status,
-        message: get().message,
+        data: res.data.data,
+        total: res.data.pagination.total,
+        status: res.data.status,
+        message: res.data.message,
       });
-
-      handleApiSuccess(get().message);
+      return res.data.data;
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }
@@ -46,13 +43,12 @@ export const usePaymentMethodStore = create<PaymentMethodState>((set, get) => ({
   switchActivation: async (id) => {
     set({ loading: true });
     try {
-      const res = await api.put<PaymentMethodModel>(`${ENDPOINT}/${id}/switch-activation`);
+      const res = await api.patch(`${ENDPOINT}/${id}/switch`);
       set((state) => ({
-        data: (state.data as PaymentMethodModel[]).map((a) => (a.id === id ? res.data : a)),
+        data: (state.data as PaymentMethodModel[]).map((a) => (a.id === id ? res.data.data : a)),
       }));
-      handleApiSuccess(get().message);
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }

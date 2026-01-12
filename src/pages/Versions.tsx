@@ -8,8 +8,6 @@ import { useVersionStore } from "../store/useVersionStore";
 import { Stack, IconButton, Switch } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 
 // i18next
 import { useTranslation } from "react-i18next";
@@ -31,6 +29,7 @@ export default function Versions() {
     selected: selectedVersion,
     total,
     fetchVersions,
+    createVersion,
     updateVersion,
     makePublish,
     setSelectedVersion
@@ -68,19 +67,37 @@ export default function Versions() {
   // Handle form submit depending on mode
   const handleConfirm = async (data?: Partial<VersionModel>) => {
     try {
-     if (formMode === "update" && selectedVersion?.id && data) {
+      if (formMode === "create" && data) {
+          await createVersion(data as Omit<VersionModel, "id" | "status" | "released_at">);
+        } else if (formMode === "update" && selectedVersion?.id && data) {
         // Update selected version
         await updateVersion(selectedVersion.id, data);
-      } 
+      }
     } catch (err) {
       console.error(err);
     }
   };
 
+
   // Define columns for EntityTable
   const columns: Column<VersionModel>[] = [
-    { key: "id", label: "ID", sortable: true },
-    { key: "version", label: "Version", sortable: true },
+    { key: "id", label: "#", sortable: true },
+    { key: "version", label: t("version.title"), sortable: true },
+    { key: "platform", label: t("version.platform"), sortable: true },
+    { key: "currency", label: t("version.currency"), sortable: true },
+    {
+      key: "is_required",
+      label: t("version.is_required"),
+      sortable: true,
+      render: (_value, row) => row.is_required ? t("shared.yes"): t("shared.no")
+    },
+    { key: "status", label: t("version.status"), sortable: true },
+    {
+      key: "released_at",
+      label: t("version.released_at"),
+      sortable: true,
+      render: (_value, row) => new Date(row.released_at).toDateString() || "-",
+    },
   ];
 
   return (
@@ -100,17 +117,7 @@ export default function Versions() {
         onCreateClick={() => openForm("create")}
         actions={(version) => (
           <Stack direction="row" spacing={1}>
-            {/* View button */}
-            <IconButton
-              onClick={() => openForm("view", version)}
-              sx={{
-                bgcolor: (theme) => alpha(theme.palette.info.main, 0.1),
-                color: "info.main",
-                "&:hover": { bgcolor: (theme) => alpha(theme.palette.info.main, 0.2) },
-              }}
-            >
-              <VisibilityIcon fontSize="small" />
-            </IconButton>
+
 
             {/* Edit button */}
             <IconButton
@@ -124,26 +131,16 @@ export default function Versions() {
               <EditIcon fontSize="small" />
             </IconButton>
 
-            {/* Delete button */}
-            <IconButton
-              onClick={() => openForm("delete", version)}
-              sx={{
-                bgcolor: (theme) => alpha(theme.palette.error.main, 0.1),
-                color: "error.main",
-                "&:hover": { bgcolor: (theme) => alpha(theme.palette.error.main, 0.2) },
-              }}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-
             {/* Switch Account toggle */}
-            <Switch
-              checked={version.status === "draft"} 
-              onChange={async () => {
-                await makePublish(version.id);
-              }}
-              color="primary"
-            />
+            {version.status === "draft" && (
+              <Switch
+                onChange={async () => {
+                  await makePublish(version.id);
+                  fetchVersions(page, per_page, search);
+                }}
+                color="primary"
+              />
+            )}
           </Stack>
         )}
       />

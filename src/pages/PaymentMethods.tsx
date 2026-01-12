@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { usePaymentMethodStore } from "../store/usePaymentMethodStore";
 
 // MUI
-import { Stack, Switch } from "@mui/material";
+import { Stack, Switch, Avatar } from "@mui/material";
 
 // i18next
 import { useTranslation } from "react-i18next";
@@ -32,7 +32,6 @@ export default function PaymentMethods() {
   const [per_page, setPerPage] = useState(10);
   const [search, setSearch] = useState("");
 
-
   // Fetch paymentMethods whenever page or per_page changes
   useEffect(() => {
     fetchPaymentMethods(page, per_page, search);
@@ -46,8 +45,24 @@ export default function PaymentMethods() {
 
   // Define columns for EntityTable
   const columns: Column<PaymentMethodModel>[] = [
-    { key: "id", label: "ID", sortable: true },
-    { key: "name", label: "Name", sortable: true },
+    { key: "id", label: "#", sortable: true },
+    {
+      key: "name",
+      label: t("shared.name"),
+      sortable: true,
+      render: (_value, row) => (
+        <Stack direction="row" columnGap={1} alignItems="center">
+          <Avatar
+            src={row.image}
+            alt={row.name}
+            sx={{ width: 32, height: 32 }}
+          />
+          {row.name}
+        </Stack>
+      ),
+    },
+
+    { key: "arabic_name", label: t("shared.arabic_name"), sortable: true }
   ];
 
   return (
@@ -62,19 +77,16 @@ export default function PaymentMethods() {
         total={total}
         onPageChange={setPage}
         onRowsPerPageChange={setPerPage}
-        showCreate
+        showCreate={false}
         createLabel={t("create")}
         actions={(paymentMethod) => (
-          <Stack direction="row" spacing={1}>
-            {/* Switch Account toggle */}
-            <Switch
-              checked={paymentMethod.is_active} 
-              onChange={async () => {
-                await switchActivation(paymentMethod.id);
-              }}
-              color="primary"
-            />
-          </Stack>
+          <Switch
+            checked={paymentMethod.is_active}
+            onChange={async () => {
+              await switchActivation(paymentMethod.id);
+            }}
+            color="primary"
+          />
         )}
       />
     </>

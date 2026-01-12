@@ -152,7 +152,7 @@ export default function ProductForm({
     setIsSubmitting(true);
     try {
       const formData = new FormData();
-      if (mode === "update") formData.append("_method", "PUT");
+      if (mode === "update") formData.append("_method", "PATCH");
 
       // ✅ Add basic product fields
       Object.entries(data).forEach(([key, value]) => {

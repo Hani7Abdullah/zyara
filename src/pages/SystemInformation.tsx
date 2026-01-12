@@ -8,8 +8,6 @@ import { useSystemInformationStore } from "../store/useSystemInformationStore";
 import { Stack, IconButton } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 
 // i18next
 import { useTranslation } from "react-i18next";
@@ -23,12 +21,12 @@ import type { CRUDMode } from "../types/common";
 import type { SystemInformationModel } from "../types/systemInformation";
 
 export default function SystemInformation() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
-  // Extract state & actions from the SystemInformation store
+  // Extract state & actions from the systemInformation store
   const {
     data: systemInformation,
-    selected: selectedSystemInformation,
+    selected: selectedsystemInformation,
     total,
     fetchSystemInformation,
     updateSystemInformation,
@@ -56,10 +54,10 @@ export default function SystemInformation() {
   };
 
   // Open form in a specific mode (view, create, update, delete)
-  const openForm = (mode: CRUDMode, SystemInformation?: SystemInformationModel) => {
+  const openForm = (mode: CRUDMode, systemInformation?: SystemInformationModel) => {
     setFormMode(mode);
-    if (SystemInformation) {
-      setSelectedSystemInformation(SystemInformation);
+    if (systemInformation) {
+      setSelectedSystemInformation(systemInformation);
     }
     setFormOpen(true);
   };
@@ -67,9 +65,9 @@ export default function SystemInformation() {
   // Handle form submit depending on mode
   const handleConfirm = async (data?: Partial<SystemInformationModel>) => {
     try {
-      if (formMode === "update" && selectedSystemInformation?.id && data) {
-        // Update selected SystemInformation
-        await updateSystemInformation(selectedSystemInformation.id, data);
+      if (formMode === "update" && selectedsystemInformation?.id && data) {
+        // Update selected systemInformation
+        await updateSystemInformation(selectedsystemInformation.id, data);
       }
     } catch (err) {
       console.error(err);
@@ -78,9 +76,19 @@ export default function SystemInformation() {
 
   // Define columns for EntityTable
   const columns: Column<SystemInformationModel>[] = [
-    { key: "id", label: "ID", sortable: true },
-    { key: "name", label: "Name", sortable: true },
-    { key: "content", label: "Content", sortable: true },
+    { key: "id", label: "#", sortable: true },
+    {
+      key: "name",
+      label: t("shared.name"),
+      sortable: true,
+      render: (_value, row) => i18n.language === "en" ? row.name : row.arabic_name,
+    },
+    {
+      key: "content",
+      label: t("systemInformation.content"),
+      sortable: true,
+      render: (_value, row) => i18n.language === "en" ? row.content : row.arabic_content,
+    },
   ];
 
   return (
@@ -95,26 +103,16 @@ export default function SystemInformation() {
         total={total}
         onPageChange={setPage}
         onRowsPerPageChange={setPerPage}
-        showCreate
+        showCreate={false}
         createLabel={t("create")}
         onCreateClick={() => openForm("create")}
-        actions={(SystemInformation) => (
+        actions={(systemInformation) => (
           <Stack direction="row" spacing={1}>
-            {/* View button */}
-            <IconButton
-              onClick={() => openForm("view", SystemInformation)}
-              sx={{
-                bgcolor: (theme) => alpha(theme.palette.info.main, 0.1),
-                color: "info.main",
-                "&:hover": { bgcolor: (theme) => alpha(theme.palette.info.main, 0.2) },
-              }}
-            >
-              <VisibilityIcon fontSize="small" />
-            </IconButton>
+           
 
             {/* Edit button */}
             <IconButton
-              onClick={() => openForm("update", SystemInformation)}
+              onClick={() => openForm("update", systemInformation)}
               sx={{
                 bgcolor: (theme) => alpha(theme.palette.warning.main, 0.1),
                 color: "warning.main",
@@ -123,29 +121,17 @@ export default function SystemInformation() {
             >
               <EditIcon fontSize="small" />
             </IconButton>
-
-            {/* Delete button */}
-            <IconButton
-              onClick={() => openForm("delete", SystemInformation)}
-              sx={{
-                bgcolor: (theme) => alpha(theme.palette.error.main, 0.1),
-                color: "error.main",
-                "&:hover": { bgcolor: (theme) => alpha(theme.palette.error.main, 0.2) },
-              }}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
           </Stack>
         )}
       />
 
-      {/* SystemInformation form modal for create/update/delete */}
+      {/* systemInformation form modal for create/update/delete */}
       <SystemInformationForm
         open={formOpen}
         onClose={() => setFormOpen(false)}
         onConfirm={handleConfirm}
         mode={formMode}
-        initialData={selectedSystemInformation}
+        initialData={selectedsystemInformation}
       />
     </>
   );

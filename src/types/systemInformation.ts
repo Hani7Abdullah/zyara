@@ -3,7 +3,7 @@ import type { BaseState } from "./common";
 export interface SystemInformationModel {
   id: string;
   name: string;
-  arabic_name: string;
+  arabic_name?: string;
   content: string;
   arabic_content: string;
 }

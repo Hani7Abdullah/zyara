@@ -1,8 +1,6 @@
 import { create } from "zustand";
 import type { VersionState, VersionModel } from "../types/version";
 import api from "../api";
-import { handleApiError } from "../api/apiErrorHandler";
-import { handleApiSuccess } from "../api/apiSuccessHandler";
 
 const ENDPOINT = "versions";
 
@@ -13,70 +11,75 @@ export const useVersionStore = create<VersionState>((set, get) => ({
   selected: {
     id: "",
     version: "",
-    base_url: null,
     platform: "android",
-    currency_id: "",
-    currency: {
-      id: "",
-      code: "",
-      symbol: "",
-      exchange_rate: 0,
-      is_active: false
-    },
+    currency: "",
     is_required: false,
-    status: "draft"
+    status: "draft",
+    released_at: new Date()
   },
   loading: false,
   mode: "view",
   total: 0,
 
-  fetchVersions: async (page = 0, per_page = 10, search = "") => {
+  fetchVersions: async (page = 1, per_page = 10, search = "") => {
     set({ loading: true });
     try {
       const res = await api.get(ENDPOINT, {
-        params: { page: page + 1, per_page, search }, // include search
+        params: { page, per_page, search }, // include search
       });
 
       set({
-        data: res.data.data.items,
-        total: res.data.data.total || res.data.data.items.length,
-        status: get().status,
-        message: get().message,
+        data: res.data.data,
+        total: res.data.pagination.total,
+        status: res.data.status,
+        message: res.data.message,
       });
-
-      handleApiSuccess(get().message);
+      return res.data.data;
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }
   },
+
+  createVersion: async (role) => {
+      set({ loading: true });
+      try {
+        const res = await api.post(ENDPOINT, role);
+        set((state)=>({
+          data: [res.data.data, ...(state.data as VersionModel[])],
+        }));
+      } catch (err) {
+        console.error(err);
+      } finally {
+        set({ loading: false });
+      }
+    },
 
    updateVersion: async (id, version) => {
     set({ loading: true });
     try {
-      const res = await api.put<VersionModel>(`${ENDPOINT}/${id}`, version);
+      const res = await api.patch(`${ENDPOINT}/${id}`, version);
       set((state) => ({
-        data: (state.data as VersionModel[]).map((a) => (a.id === id ? res.data : a)),
+        data: (state.data as VersionModel[]).map((v) => (v.id === id ? res.data.data : v)),
       }));
-      handleApiSuccess(get().message);
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }
   },
 
-  makePublish: async (id) => {
+
+   makePublish: async (id) => {
     set({ loading: true });
     try {
-      const res = await api.put<VersionModel>(`${ENDPOINT}/${id}/switch-activation`);
+      const res = await api.patch(`${ENDPOINT}/${id}/publish`);
       set((state) => ({
-        data: (state.data as VersionModel[]).map((a) => (a.id === id ? res.data : a)),
+        data: (state.data as VersionModel[]).map((v) => (v.id === id ? res.data.data : v)),
       }));
-      handleApiSuccess(get().message);
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }

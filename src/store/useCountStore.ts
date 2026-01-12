@@ -11,11 +11,13 @@ export const useCountStore = create<CountState>((set, get) => ({
     categories: 0,
     products: 0,
     stores: 0,
+    users: 0,
   },
   selected: {
     categories: 0,
     products: 0,
     stores: 0,
+    users: 0,
   },
   loading: false,
   mode: "view",

@@ -1,19 +1,16 @@
 import { create } from "zustand";
 import type { SystemInformationState, SystemInformationModel } from "../types/systemInformation";
 import api from "../api";
-import { handleApiError } from "../api/apiErrorHandler";
-import { handleApiSuccess } from "../api/apiSuccessHandler";
 
-const ENDPOINT = "pages";
+const ENDPOINT = "information";
 
-export const useSystemInformationStore = create<SystemInformationState>((set, get) => ({
+export const useSystemInformationStore = create<SystemInformationState>((set) => ({
     status: false,
     message: "",
     data: [] as SystemInformationModel[],
     selected: {
         id: "",
         name: "",
-        arabic_name: "",
         content: "",
         arabic_content: ""
     },
@@ -21,42 +18,40 @@ export const useSystemInformationStore = create<SystemInformationState>((set, ge
     mode: "view",
     total: 0,
 
-    fetchSystemInformation: async (page = 0, per_page = 10, search = "") => {
+    fetchSystemInformation: async (page = 1, per_page = 10, search = "") => {
         set({ loading: true });
         try {
-            const res = await api.get(ENDPOINT, {
-                params: { page: page + 1, per_page, search },
-            });
-
-            set({
-                data: res.data.data.items,
-                total: res.data.data.total || res.data.data.items.length,
-                status: get().status,
-                message: get().message,
-            });
-
-            handleApiSuccess(get().message);
+          const res = await api.get(ENDPOINT, {
+            params: { page, per_page, search }, // include search
+          });
+    
+          set({
+            data: res.data.data,
+            total: res.data.pagination.total,
+            status: res.data.status,
+            message: res.data.message,
+          });
+          return res.data.data;
         } catch (err) {
-            handleApiError(err);
+          console.error(err);
         } finally {
-            set({ loading: false });
+          set({ loading: false });
         }
-    },
+      },
 
     updateSystemInformation: async (id, systemInformation) => {
         set({ loading: true });
         try {
-            const res = await api.put<SystemInformationModel>(`${ENDPOINT}/${id}`, systemInformation);
-            set((state) => ({
-                data: (state.data as SystemInformationModel[]).map((a) => (a.id === id ? res.data : a)),
-            }));
-            handleApiSuccess(get().message);
+          const res = await api.patch(`${ENDPOINT}/${id}`, systemInformation);
+          set((state) => ({
+            data: (state.data as SystemInformationModel[]).map((s) => (s.id === id ? res.data.data : s)),
+          }));
         } catch (err) {
-            handleApiError(err);
+          console.error(err);
         } finally {
-            set({ loading: false });
+          set({ loading: false });
         }
-    },
+      },
 
     setSelectedSystemInformation: (systemInformation) => set({ selected: systemInformation }),
 }));

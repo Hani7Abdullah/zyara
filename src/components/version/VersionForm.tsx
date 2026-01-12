@@ -1,26 +1,37 @@
-//React
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+// React
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 
-//MUI
-import { Button, Stack, TextField, Typography, Grid } from "@mui/material";
+// MUI
+import {
+  Stack,
+  TextField,
+  Grid,
+  Typography,
+  Switch,
+  Button,
+  CircularProgress,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+} from "@mui/material";
 
-//i18next
+// i18n
 import { useTranslation } from "react-i18next";
 
-//Components
+// Components
 import EntityModalForm from "../EntityModal";
-import ViewTable from "../ViewTable";
 
-//Types
+// Store & Types
 import type { VersionModel } from "../../types/version";
 import type { CRUDMode } from "../../types/common";
 
-//Props
 interface Props {
   open: boolean;
   onClose: () => void;
-  onConfirm: (data?: Partial<VersionModel>) => void;
+  onConfirm: (data: Partial<VersionModel>, id?: string) => void;
   mode: CRUDMode;
   initialData?: Partial<VersionModel>;
 }
@@ -33,91 +44,144 @@ export default function VersionForm({
   initialData,
 }: Props) {
   const { t } = useTranslation();
+
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<Partial<VersionModel>>({
     defaultValues: {},
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   useEffect(() => {
-    if (mode === "create") {
-      reset({ version: ""});
-    } else {
-      reset(initialData);
+    reset(initialData);
+  }, [initialData, reset]);
+
+  const onSubmit = async (data: Partial<VersionModel>) => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      await onConfirm(data, initialData?.id?.toString());
+    } finally {
+      setIsSubmitting(false);
     }
-  }, [mode, initialData, reset]);
-
-  const isView = mode === "view";
-
-  const onSubmit = (data: Partial<VersionModel>) => {
-    onConfirm(data);
-    reset();
   };
 
   const handleClose = () => {
-    onClose();
-    reset();
+    if (!isSubmitting) {
+      onClose();
+      reset();
+    }
   };
 
   return (
     <EntityModalForm
       open={open}
       onClose={handleClose}
-      title={`${t(mode)} ${t("version")}`}
+      title={`${t(mode)} ${t("version.title")}`}
     >
-      {mode === "delete" ? (
-        <Stack spacing={3}>
-          <Typography>{t("version.confirmDelete")}</Typography>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack direction="column" spacing={3}>
+          <Grid container spacing={2} sx={{ pt: 1 }}>
+            {mode === "create" && (
+              <>
+                <Grid size={{xs:12, md: 7}}>
+                  <TextField
+                    label={t("version.title")}
+                    {...register("version", {
+                      required: t("validation.required") as string,
+                    })}
+                    error={!!errors.version}
+                    helperText={errors.version?.message}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+
+                {/* Platform Radio Buttons */}
+                <Grid size={{xs:12, md: 5}}>
+                  <FormControl component="fieldset" error={!!errors.platform}>
+                    <Controller
+                      name="platform"
+                      control={control}
+                      defaultValue={initialData?.platform ?? "android"}
+                      render={({ field }) => (
+                        <RadioGroup {...field} row>
+                          <FormControlLabel
+                            value="android"
+                            control={<Radio />}
+                            label={t("version.android")}
+                          />
+                          <FormControlLabel
+                            value="ios"
+                            control={<Radio />}
+                            label={t("version.ios")}
+                          />
+                        </RadioGroup>
+                      )}
+                    />
+                    {errors.platform && (
+                      <Typography variant="caption" color="error">
+                        {errors.platform.message}
+                      </Typography>
+                    )}
+                  </FormControl>
+                </Grid>
+              </>
+            )}
+            { mode ==="update" && (
+            <Grid size={{xs:12, md: 7}}>
+              <TextField
+                label={t("version.currency")}
+                {...register("currency", {
+                  required: t("validation.required") as string,
+                })}
+                error={!!errors.currency}
+                helperText={errors.currency?.message}
+                fullWidth
+                size="small"
+              />
+            </Grid>
+            )}
+            <Grid size={{xs:12, md: 5}}>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography>{t("version.is_required")}</Typography>
+                <Controller
+                  name="is_required"
+                  control={control}
+                  defaultValue={initialData?.is_required ?? false}
+                  render={({ field }) => (
+                    <Switch {...field} checked={field.value} disabled={isSubmitting} />
+                  )}
+                />
+              </Stack>
+            </Grid>
+          </Grid>
+
+          {/* Buttons */}
           <Stack direction="row" spacing={2} justifyContent="flex-end">
-            <Button onClick={handleClose} variant="outlined">
+            <Button onClick={handleClose} variant="outlined" disabled={isSubmitting}>
               {t("cancel")}
             </Button>
-            <Button onClick={() => onConfirm()} variant="contained" color="error">
-              {t("sure")}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isSubmitting}
+              startIcon={
+                isSubmitting ? <CircularProgress size={20} color="inherit" /> : undefined
+              }
+            >
+              {t(mode === "create" ? "create" : "update")}
             </Button>
           </Stack>
         </Stack>
-      ) : isView && initialData ? (
-        <ViewTable
-          rows={[
-            { label: t("shared.version"), value: initialData.version },
-          ]}
-        />
-      ) : (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack direction="column" spacing={3}>
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField
-                  label={t("shared.version")}
-                  {...register("version", {
-                    required: t("validation.required") as string,
-                  })}
-                  error={!!errors.version}
-                  helperText={errors.version?.message}
-                  fullWidth
-                  size="small"
-                  disabled={isView}
-                />
-              </Grid>
-            </Grid>
-
-            {!isView && (
-              <Stack direction="row" spacing={2} justifyContent="flex-end">
-                <Button onClick={handleClose} variant="outlined">
-                  {t("cancel")}
-                </Button>
-                <Button type="submit" variant="contained" color="primary">
-                  {t(mode === "create" ? "create" : "update")}
-                </Button>
-              </Stack>
-            )}
-          </Stack>
-        </form>
-      )}
+      </form>
     </EntityModalForm>
   );
 }
