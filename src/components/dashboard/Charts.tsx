@@ -53,7 +53,7 @@ export default function OrdersChart() {
       <ResponsiveContainer width="100%" height={350}>
         <LineChart data={Array.isArray(statistics) ? statistics : []}>
           <CartesianGrid strokeDasharray="3 3" stroke={theme.palette.divider} />
-          <XAxis dataKey="name" />
+          <XAxis dataKey="month" />
           <YAxis />
           <Tooltip />
           <Legend />

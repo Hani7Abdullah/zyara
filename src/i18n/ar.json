@@ -85,8 +85,8 @@
     "yes": "نعم",
     "no": "كلا",
     "start_date": "تاريخ البداية",
-  "end_date": "تاريخ النهاية",
-  "type": "النوع"
+    "end_date": "تاريخ النهاية",
+    "type": "النوع"
   },
   "paymentMethod": {
     "title": "طريقة الدفع",
@@ -150,7 +150,7 @@
     "addNew": "إضافة مسؤول جديد",
     "confirmDelete": "هل أنت متأكد أنك تريد حذف هذا المسؤول؟"
   },
-   "coupon": {
+  "coupon": {
     "title": "كود الحسم",
     "addNew": "إضافة كود حسم جديد",
     "confirmDelete": "هل أنت متأكد أنك تريد حذف كوبون الحسم هذا؟",
@@ -180,7 +180,7 @@
     "confirmDelete": "هل أنت متأكد أنك تريد حذف هذا الدور؟",
     "permissions": "الصلاحيات"
   },
-   "setting": {
+  "setting": {
     "title": "الإعداد"
   },
   "popularTopic": {
@@ -193,14 +193,24 @@
     "arabic_answer": "الإجابة بالعربي"
   },
   "slide": {
-  "title": "الشريحة",
-  "addNew": "إضافة شريحة جديدة",
-  "confirmDelete": "هل أنت متأكد أنك تريد حذف هذه الشريحة؟",
-  "internal": "داخلي",
-  "external": "خارجي",
-  "owner": "المالك"
-},
-   "systemInformation": {
+    "title": "الشريحة",
+    "addNew": "إضافة شريحة جديدة",
+    "confirmDelete": "هل أنت متأكد أنك تريد حذف هذه الشريحة؟",
+    "internal": "داخلي",
+    "external": "خارجي",
+    "owner": "المالك"
+  },
+  "currency": {
+    "title": "العملة",
+    "addNew": "إضافة عملة جديدة",
+    "confirmDelete": "هل أنت متأكد من رغبتك في حذف هذه العملة؟",
+    "code": "الكود",
+    "symbol": "الشكل",
+    "rate": "المعدل",
+    "refresh-live": "معدل التحديث المباشر",
+    "refreshing": "يتم التحديث"
+  },
+  "systemInformation": {
     "title": "معلومات النظام",
     "content": "المحتوى",
     "arabic_content": "المحتوى بالعربية"

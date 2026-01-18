@@ -26,7 +26,7 @@
   "coupons": "Coupons",
   "gift cards": "Gift Cards",
   "popular topics": "Popular Topics",
-  "recharge balances" : "Recharge Balances",
+  "recharge balances": "Recharge Balances",
   "information": "System Information",
   "versions": "App Versions",
   "offers": "Offers",
@@ -76,7 +76,7 @@
     "deactivate": "Deactivate",
     "link": "Link",
     "priority": "Priority",
-    "password":"Password",
+    "password": "Password",
     "sort": "Sort",
     "enableSort": "Enable Sort",
     "address": "Address",
@@ -149,8 +149,8 @@
     "title": "Admin",
     "addNew": "Add New Admin",
     "confirmDelete": "Are you sure you want to delete this admin?"
-  },  
-   "coupon": {
+  },
+  "coupon": {
     "title": "Coupon",
     "addNew": "Add New Coupon",
     "confirmDelete": "Are you sure you want to delete this coupon?",
@@ -160,11 +160,11 @@
     "for_all_users": "For all clients",
     "for_all_stores": "For all stores"
   },
-   "vendor": {
+  "vendor": {
     "title": "Vendor",
     "addNew": "Add New Vendor",
     "confirmDelete": "Are you sure you want to delete this vendor?"
-  },  
+  },
   "client": {
     "title": "Client",
     "country": "Country",
@@ -182,7 +182,7 @@
   },
   "setting": {
     "title": "Setting"
-  },  
+  },
   "popularTopic": {
     "title": "Topic",
     "addNew": "Add New Topic",
@@ -197,8 +197,18 @@
     "addNew": "Add New Slide",
     "confirmDelete": "Are you sure you want to delete this slide?",
     "internal": "Internal",
-    "external":"External",
+    "external": "External",
     "owner": "Owner"
+  },
+  "currency": {
+    "title": "Currency",
+    "addNew": "Add New Currency",
+    "confirmDelete": "Are you sure you want to delete this currency?",
+    "code": "Code",
+    "symbol": "Symbol",
+    "rate": "Rate",
+    "refresh-live": "Refresh Live Rate",
+    "refreshing": "Refreshing"
   },
   "systemInformation": {
     "title": "System Information",
@@ -219,40 +229,40 @@
     "released_at": "Released At"
   },
   "store": {
-  "title": "Store",
-  "confirmDelete": "Are you sure you want to delete this store?",
-  "brand": "Brand",
-  "arabic_brand": "Arabic Brand",
-  "working_days": "Working Days",
-  "opening_time": "Opening Time",
-  "closing_time": "Closing Time",
-  "vacation": "Vacation",
-  "service_method": "Service Method",
-  "pick_up": "Pickup",
-  "delivery": "Delivery",
-  "both": "Both",
-  "delivery_cost": "Delivery Cost",
-  "delivery_duration": "Delivery Duration (Minutes)",
-  "min_order_value": "Minimum Order Value",
-  "minutes": "Minutes",
-  "all": "All Stores",
-  "select_store": "Select Store"
-},
-"days": {
-  "sunday": "Sunday",
-  "monday": "Monday",
-  "tuesday": "Tuesday",
-  "wednesday": "Wednesday",
-  "thursday": "Thursday",
-  "friday": "Friday",
-  "saturday": "Saturday"
-},
+    "title": "Store",
+    "confirmDelete": "Are you sure you want to delete this store?",
+    "brand": "Brand",
+    "arabic_brand": "Arabic Brand",
+    "working_days": "Working Days",
+    "opening_time": "Opening Time",
+    "closing_time": "Closing Time",
+    "vacation": "Vacation",
+    "service_method": "Service Method",
+    "pick_up": "Pickup",
+    "delivery": "Delivery",
+    "both": "Both",
+    "delivery_cost": "Delivery Cost",
+    "delivery_duration": "Delivery Duration (Minutes)",
+    "min_order_value": "Minimum Order Value",
+    "minutes": "Minutes",
+    "all": "All Stores",
+    "select_store": "Select Store"
+  },
+  "days": {
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday"
+  },
   "validation": {
     "required": "This field is required",
     "required_logo": "Logo is required",
     "required_image": "Image is required",
     "minValue": "Value must be at least {{value}}",
-  "invalidNumber": "Invalid number",
+    "invalidNumber": "Invalid number",
     "at_least_one_working_day": "Please select at least one working day."
   },
   "reset": {

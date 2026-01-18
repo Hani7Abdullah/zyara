@@ -51,8 +51,8 @@ export const sidebarMenu: MenuItem[] = [
   // { textKey: 'orders', icon: <ReceiptLongOutlined fontSize="small" />, path: '/orders' },
 
   // Payments
-  { textKey: 'payment methods', icon: <CreditCardOutlined fontSize="small" />, path: '/payment-methods', role: "admin" },
-  // { textKey: 'currencies', icon: <AttachMoney fontSize="small" />, path: '/currencies', role: "admin" },
+  { textKey: 'Payment Methods', icon: <CreditCardOutlined fontSize="small" />, path: '/payment-methods', role: "admin" },
+  { textKey: 'Currencies', icon: <AttachMoney fontSize="small" />, path: '/currencies', role: "admin" },
   // { textKey: 'recharge balances', icon: <PhoneIphone fontSize="small" />, path: '/mobile-recharge', role: "admin" },
 
   // Promotions & Marketing

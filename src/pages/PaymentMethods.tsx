@@ -55,7 +55,12 @@ export default function PaymentMethods() {
           <Avatar
             src={row.image}
             alt={row.name}
-            sx={{ width: 32, height: 32 }}
+            sx={{ 
+              width: "max-content",
+              height: 20,
+              objectFit: "contain",
+              borderRadius: 0
+             }}
           />
           {row.name}
         </Stack>

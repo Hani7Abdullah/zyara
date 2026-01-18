@@ -4,9 +4,14 @@ export interface StatisticRequestModel {
   year: number;
 }
 
-export interface StatisticModel {
-  name: string;
+export interface StatisticItemModel {
+  month: string;
   orders: number;
+}
+
+export interface StatisticModel {
+  year: number;
+  data: StatisticItemModel[]
 }
 
 export interface StatisticState extends BaseState<StatisticModel> {

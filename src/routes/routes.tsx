@@ -34,6 +34,7 @@ const PaymentMethods = lazy(() => import('../pages/PaymentMethods'));
 const Messages = lazy(() => import('../pages/Messages'));
 const PopularTopics = lazy(() => import('../pages/PopularTopics'));
 const Settings = lazy(() => import('../pages/Settings'));
+const Currencies = lazy(() => import('../pages/Currencies'));
 const SystemInformation = lazy(() => import('../pages/SystemInformation'));
 const JoinRequests = lazy(() => import('../pages/JoinRequests'));
 
@@ -237,6 +238,16 @@ export const protectedRoutes: RouteObject[] = [
       <RequireRole roles={['admin']}>
         <Suspense fallback={<Loading />}>
           <Settings />
+        </Suspense>
+      </RequireRole>
+    )
+  },
+  {
+    path: '/currencies',
+    element: (
+      <RequireRole roles={['admin']}>
+        <Suspense fallback={<Loading />}>
+          <Currencies />
         </Suspense>
       </RequireRole>
     )

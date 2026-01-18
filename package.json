@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
+    "currency-codes": "^2.2.0",
+    "currency-symbol-map": "^5.1.0",
     "firebase": "^12.7.0",
     "formik": "^2.4.6",
     "moment": "^2.30.1",

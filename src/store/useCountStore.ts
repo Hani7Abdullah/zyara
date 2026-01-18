@@ -2,7 +2,7 @@ import { create } from "zustand";
 import type { CountState, CountModel } from "../types/count";
 import api from "../api";
 
-const ENDPOINT = "counts";
+const ENDPOINT = "statistics/count";
 
 export const useCountStore = create<CountState>((set, get) => ({
   status: false,

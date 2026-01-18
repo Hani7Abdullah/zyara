@@ -1,12 +1,10 @@
 import { create } from "zustand";
 import type { CurrencyState, CurrencyModel } from "../types/currency";
 import api from "../api";
-import { handleApiError } from "../api/apiErrorHandler";
-import { handleApiSuccess } from "../api/apiSuccessHandler";
 
 const ENDPOINT = "currencies";
 
-export const useCurrencyStore = create<CurrencyState>((set, get) => ({
+export const useCurrencyStore = create<CurrencyState>((set) => ({
   status: false,
   message: "",
   data: [] as CurrencyModel[],
@@ -14,45 +12,88 @@ export const useCurrencyStore = create<CurrencyState>((set, get) => ({
     id: 0,
     code: "",
     symbol: "",
-    exchange_rate: 0,
-    is_active: false
+    rate: 0
   },
   loading: false,
   mode: "view",
   total: 0,
 
-  fetchCurrencies: async (page = 0, per_page = 10, search = "") => {
+  fetchCurrencies: async (page = 1, per_page = 10, search = "") => {
     set({ loading: true });
     try {
       const res = await api.get(ENDPOINT, {
-        params: { page: page + 1, per_page, search }, // include search
+        params: { page, per_page, search }, // include search
       });
 
       set({
-        data: res.data.data.items,
-        total: res.data.data.total || res.data.data.items.length,
-        status: get().status,
-        message: get().message,
+        data: res.data.data,
+        total: res.data.pagination.total,
+        status: res.data.status,
+        message: res.data.message,
       });
-
-      handleApiSuccess(get().message);
+      return res.data.data;
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
     } finally {
       set({ loading: false });
     }
   },
 
-  switchActivation: async (id) => {
+  createCurrency: async (currency) => {
     set({ loading: true });
     try {
-      const res = await api.put<CurrencyModel>(`${ENDPOINT}/${id}/switch-activation`);
+      const res = await api.post(ENDPOINT, currency, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       set((state) => ({
-        data: (state.data as CurrencyModel[]).map((a) => (a.id === id ? res.data : a)),
+        data: [res.data.data, ...(state.data as CurrencyModel[])],
       }));
-      handleApiSuccess(get().message);
     } catch (err) {
-      handleApiError(err);
+      console.error(err);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  updateCurrency: async (id, currency) => {
+    set({ loading: true });
+    try {
+      const res = await api.post(`${ENDPOINT}/${id}`, currency, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      set((state) => ({
+        data: (state.data as CurrencyModel[]).map((a) => (a.id === id ? res.data.data : a)),
+      }));
+    } catch (err) {
+      console.error(err);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  updateCurrencyRate: async () => {
+    set({ loading: true });
+    try {
+      const res = await api.post(`${ENDPOINT}/rates/update`);
+      set({
+        data: res.data.data,
+      });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  deleteCurrency: async (id) => {
+    set({ loading: true });
+    try {
+      await api.delete(`${ENDPOINT}/${id}`);
+      set((state) => ({
+        data: (state.data as CurrencyModel[]).filter((a) => a.id !== id),
+      }));
+    } catch (err) {
+      console.error(err);
     } finally {
       set({ loading: false });
     }
